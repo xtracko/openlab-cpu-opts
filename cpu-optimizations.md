@@ -11,7 +11,6 @@
 
 # Use best algorithm for you use case
 
->
 ~~~~~~~c++
 bool isPrime(int p) {
   for (int i = 0; i < p; i++)
@@ -19,46 +18,131 @@ bool isPrime(int p) {
   return true;
 }
 ~~~~~~~
->
-```c++
+
+----
+
+# Use best algorithm for you use case
+
+
+~~~~~~~c++
+bool isPrime(int p) {
+  for (int i = 0; i < p; i++)
+    if (p % i == 0) return false;
+  return true;
+}
+~~~~~~~
+
+~~~~~~~c++
 bool isPrimeBetter(int p) {
   for (int i = 0; i < sqrt(p); i++)
       if (p % i == 0) return false;
   return true;
 }
-```
->
-```c++
+~~~~~~~
+
+----
+
+# Use best algorithm for you use case
+
+
+~~~~~~~c++
+bool isPrime(int p) {
+  for (int i = 0; i < p; i++)
+    if (p % i == 0) return false;
+  return true;
+}
+~~~~~~~
+
+~~~~~~~c++
+bool isPrimeBetter(int p) {
+  for (int i = 0; i < sqrt(p); i++)
+      if (p % i == 0) return false;
+  return true;
+}
+~~~~~~~
+
+~~~~~~~c++
 bool isPrimeEvenBetter(int p) {
   for (int i = 0; i*i < p; i++)
     if (p % i == 0) return false;
   return true;
 }
-```
+~~~~~~~
+
+----
+
+# CPU
+!["Von Neumann Architecture" by Kapooht - Own work. Licensed under CC BY-SA 3.0 via Commons - https://commons.wikimedia.org/wiki/File:Von_Neumann_Architecture.svg](./img/vna.png)
+
 
 ----
 
 # CPU
 
-TUDU: cpu.jpg
+## Little of history :)
 
-## Pipeline
+* Direct load of instruction from memory
+    * Solution: cache
+* Load, decode, translate needed memory address, execute, retire
+    * Pipeline
+![5 stages pipeline](./img/pipeline.png)\ 
 
-TUDU: obrázek
+----
 
-## IO/OOO execution
+## CPU -- Little of history :)
 
-TUDO obrázek
+* Will this work?
 
-## Modern instructions
+~~~~~~~c++
+int swap(int *a, int *b) {
+  int *tmp = a;
+  a = b;
+  b = tmp;
+}
+~~~~~~~
 
-> * SSE
-> * AVX
-> * AVX-512
-> * TSX
-> * SGX (in development)
+![5 stages pipeline](./img/pipeline.png)\ 
 
-TUDO: obrázek SSE instrukcí
+----
+
+## CPU -- Little of history :)
+
+* Pipeline stall (bubble)
+    * Out-of-order execution
+![Out-of-order execution](./img/ooo.png)\ 
+
+----
+
+## CPU -- Little of history :)
+
+* OOO needs to load a lot of instructions (128), what to do with conditional jumps?
+    * Branch prediction
+* OK, finally, our CPU is really fast, so fast, that memory is slow and does not provide input data
+    * Simultaneous multi threading (HT)
+
+----
+
+### SMT (HT)
+
+![Out-of-order execution](./img/smt.png)\ 
+
+----
+
+# CPU -- Modern instructions  (x86 is not strict RISC)
+
+* SSE, SSE2-4.2 (128b)
+![Single Cycle SSE - http://www.pcmag.com/article2/0,2817,1988753,00.asp](./img/sse.jpg)
+
+----
+
+# CPU -- Modern instructions  (x86 is not strict RISC)
+
+> * SSE, SSE2-4.2 (128b)
+* AVX, AVX2 (256b)
+* AVX-512/FMA (512b)
+* advanced:
+    * TSX
+    * SGX (in development)
 
 ----
 
@@ -73,6 +157,7 @@ TUDO: obrázek SSE instrukcí
 ## Chaching
 
 ----
+
 # Profiling
 
 * sampling
@@ -96,4 +181,16 @@ TUDO: obrázek SSE instrukcí
 ## Great tools
 * profilers as `msvc` for win & `perf` for linux
 * https://gcc.godbolt.org/
+
+----
+
+# Try it yourself!
+
+> * Go to crcs.cz -> OpenLab -> current week -> prepared code
+
+## Sources
+> * Intro images & idea: [A Journey Through the CPU Pipeline ](http://www.gamedev.net/page/resources/_/technical/general-programming/a-journey-through-the-cpu-pipeline-r3115)
+ * (Almost) current architecture: [Haswell is here. Architecture](http://www.cnews.cz/clanky/haswell-je-zde-inovace-architektura-nove-generace-procesoru-intel)
+ * http://www.codeproject.com/Articles/6154/Writing-Efficient-C-and-C-Code-Optimization
+ * http://www.codeproject.com/Articles/6154/Writing-Efficient-C-and-C-Code-Optimization
 
