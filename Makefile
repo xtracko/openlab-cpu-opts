@@ -1,2 +1,4 @@
-all: prez.md
-	pandoc -t beamer -s prez.md -o optimalizations.pdf
+all: cpu-optimizations.pdf
+
+cpu-optimizations.pdf: cpu-optimizations.md
+	pandoc -t beamer -s $< -o $@
