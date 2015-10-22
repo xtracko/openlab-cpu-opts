@@ -118,11 +118,11 @@ int swap(int *a, int *b) {
 * OOO needs to load a lot of instructions (128), what to do with conditional jumps?
     * Branch prediction
 * OK, finally, our CPU is really fast, so fast, that memory is slow and does not provide input data
-    * Simultaneous multi threading (HT)
+    * Simultaneous multithreading (HT)
 
 ----
 
-### SMT (HT)
+### Simultaneous multithreading (HT)
 
 ![Out-of-order execution](./img/smt.png)\ 
 
@@ -130,19 +130,12 @@ int swap(int *a, int *b) {
 
 # CPU -- Modern instructions  (x86 is not strict RISC)
 
-* SSE, SSE2-4.2 (128b)
-![Single Cycle SSE - http://www.pcmag.com/article2/0,2817,1988753,00.asp](./img/sse.jpg)
-
-----
-
-# CPU -- Modern instructions  (x86 is not strict RISC)
-
 > * SSE, SSE2-4.2 (128b)
-* AVX, AVX2 (256b)
-* AVX-512/FMA (512b)
-* advanced:
-    * TSX
-    * SGX (in development)
+* AVX, AVX2 (~ FMA in AMD's world) (256b)
+* AVX-512 (512b)
+* interesting (but not SIMD) new instructions:
+    * [TSX](https://software.intel.com/en-us/blogs/2012/02/07/transactional-synchronization-in-haswell) -- Transactional Synchronization Extensions
+    * [SGX](https://software.intel.com/en-us/blogs/2013/09/26/protecting-application-secrets-with-intel-sgx) (in development) -- Software Guard Extensions
 
 ----
 
