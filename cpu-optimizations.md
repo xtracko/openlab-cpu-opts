@@ -9,6 +9,35 @@
 
 ----
 
+# Use best algorithm for you use case
+
+>
+~~~~~~~c++
+bool isPrime(int p) {
+  for (int i = 0; i < p; i++)
+    if (p % i == 0) return false;
+  return true;
+}
+~~~~~~~
+>
+```c++
+bool isPrimeBetter(int p) {
+  for (int i = 0; i < sqrt(p); i++)
+      if (p % i == 0) return false;
+  return true;
+}
+```
+>
+```c++
+bool isPrimeEvenBetter(int p) {
+  for (int i = 0; i*i < p; i++)
+    if (p % i == 0) return false;
+  return true;
+}
+```
+
+----
+
 # CPU
 
 TUDU: cpu.jpg
@@ -27,7 +56,7 @@ TUDO obrázek
 > * AVX
 > * AVX-512
 > * TSX
-> * (in development)
+> * SGX (in development)
 
 TUDO: obrázek SSE instrukcí
 
@@ -35,10 +64,19 @@ TUDO: obrázek SSE instrukcí
 
 # The C/C++ programmer view
 
+* know your compiler
+* do you know what -O0 -O1 -O2 -O3 means?
+
 ## Vectorization
 ## System allocator
 ## Custom allocators
 ## Chaching
+
+----
+# Profiling
+
+* sampling
+* instrumentation
 
 ----
 
@@ -54,4 +92,8 @@ TUDO: obrázek SSE instrukcí
 1. write functonal correct code
 2. analyze the code and determine parts that are slow and critical
 3. optimize them
+
+## Great tools
+* profilers as `msvc` for win & `perf` for linux
+* https://gcc.godbolt.org/
 
