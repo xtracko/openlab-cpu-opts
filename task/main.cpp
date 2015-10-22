@@ -1,7 +1,6 @@
 #include "task.hpp"
 #include <iostream>
 
-
 int main()
 {
     Matrix mat;

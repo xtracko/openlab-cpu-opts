@@ -1,5 +1,7 @@
 #pragma once
 
+const int size = 100;
+
 struct Vector {
     int m[size];
 };
