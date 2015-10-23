@@ -141,39 +141,101 @@ int swap(int *a, int *b) {
 
 # The C/C++ programmer view
 
-* know your compiler
-* do you know what -O0 -O1 -O2 -O3 means?
+> * know your compiler
+> * don't try to be smarter then your compiler -- compilers are pretty smart :P
+> * different levels of compiler optimizations `-O0 -O1 -O2 -O3`
+
+----
 
 ## Vectorization
-## System allocator
+
+> * today compilers can vectorize you code automaticaly
+
+~~~~~~~c++
+        for (int i = 0; i < 32; i++)
+            c[i] = a[i] + b[i];
+~~~~~~~
+> * ...but several constraints must be met to make it fast
+    + memory alignemnt to 16 bytes (later)
+    + process data in order to make the full use of processor's cache
+
+---
+
+## Default allocator
+
+> * `malloc`/`new`
+> * for most cases they will do fine but when performance is needed they are slow
+
+. . .
+
 ## Custom allocators
+> * preallocate the memory by the default allocator
+> * within the preallocated block you can implement you own allocator when you know something about your data
+> * different types for different purpouse
+    + stack allocator (elements of variable size; stack ordering)
+    + pool allocator (elements of fixed size; custom ordering)
+
+----
+
 ## Chaching
+
+> * cacheline -- 64 bytes long
+> * try to fit related  variables into one cacheline
+> * c++11 keyword `alignas`
+
+~~~~~~~c++
+        alignas(64) char cacheline[64];
+        alignas(16) float vec4[4];
+~~~~~~~
 
 ----
 
 # Profiling
 
-* sampling
-* instrumentation
+## Tools
+> * `perf` (linux)
+> * `Microsoft Visual Studio` (windows)
+
+. . .
+
+## Two possible techniques
+> * sampling vs. instrumentation
 
 ----
 
 # Paralelization
 
-## C++11 threads
-## C++11 atomic instructions
+## C++11 high level approach (using `std::async`)
+~~~~~~~c++
+#include <future>
+std::future<int> result = std::async(&work, args...);
+// some work in this thread
+result.get() // fetch the result
+~~~~~~~
+
+## C++11 low level approach (using `std::thread`)
+~~~~~~~c++
+#include <thread>
+std::thread t(&work, args...); // launch other thread
+// some work
+t.join() // wait till the other thread finisches
+// ...but we can't use std::future to fetch the result
+~~~~~~~
 
 ----
 
-# Summary
+## Useful hints
 
 1. write functonal correct code
 2. analyze the code and determine parts that are slow and critical
 3. optimize them
+4. repeat till satisfied
+
+. . .
 
 ## Great tools
-* profilers as `msvc` for win & `perf` for linux
-* https://gcc.godbolt.org/
+> * <https://gcc.godbolt.org/>
+> * <https://software.intel.com/sites/landingpage/IntrinsicsGuide>
 
 ----
 
@@ -184,6 +246,6 @@ int swap(int *a, int *b) {
 ## Sources
 > * Intro images & idea: [A Journey Through the CPU Pipeline ](http://www.gamedev.net/page/resources/_/technical/general-programming/a-journey-through-the-cpu-pipeline-r3115)
  * (Almost) current architecture: [Haswell is here. Architecture](http://www.cnews.cz/clanky/haswell-je-zde-inovace-architektura-nove-generace-procesoru-intel)
- * http://www.codeproject.com/Articles/6154/Writing-Efficient-C-and-C-Code-Optimization
- * http://www.codeproject.com/Articles/6154/Writing-Efficient-C-and-C-Code-Optimization
+ * <http://www.codeproject.com/Articles/6154/Writing-Efficient-C-and-C-Code-Optimization>
+ * <http://www.codeproject.com/Articles/6154/Writing-Efficient-C-and-C-Code-Optimization>
 
