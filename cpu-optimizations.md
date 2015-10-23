@@ -5,7 +5,9 @@
 
 # Why to write optimized code
 
-*Well, it's pretty obvious.*
+. . .
+
+*We don't want our code to procrastinate!*
 
 ----
 
@@ -13,57 +15,27 @@
 
 ~~~~~~~c++
 bool isPrime(int p) {
-  for (int i = 0; i < p; i++)
+  for (int i = 2; i < p; i++)
     if (p % i == 0) return false;
   return true;
 }
 ~~~~~~~
 
-----
-
-# Use best algorithm for you use case
-
-
-~~~~~~~c++
-bool isPrime(int p) {
-  for (int i = 0; i < p; i++)
-    if (p % i == 0) return false;
-  return true;
-}
-~~~~~~~
+. . .
 
 ~~~~~~~c++
 bool isPrimeBetter(int p) {
-  for (int i = 0; i < sqrt(p); i++)
+  for (int i = 2; i < sqrt(p); i++)
       if (p % i == 0) return false;
   return true;
 }
 ~~~~~~~
 
-----
-
-# Use best algorithm for you use case
-
-
-~~~~~~~c++
-bool isPrime(int p) {
-  for (int i = 0; i < p; i++)
-    if (p % i == 0) return false;
-  return true;
-}
-~~~~~~~
-
-~~~~~~~c++
-bool isPrimeBetter(int p) {
-  for (int i = 0; i < sqrt(p); i++)
-      if (p % i == 0) return false;
-  return true;
-}
-~~~~~~~
+. . .
 
 ~~~~~~~c++
 bool isPrimeEvenBetter(int p) {
-  for (int i = 0; i*i < p; i++)
+  for (int i = 2; i*i < p; i++) //or store sqrt once
     if (p % i == 0) return false;
   return true;
 }
@@ -71,9 +43,9 @@ bool isPrimeEvenBetter(int p) {
 
 ----
 
-# CPU
-!["Von Neumann Architecture" by Kapooht - Own work. Licensed under CC BY-SA 3.0 via Commons - https://commons.wikimedia.org/wiki/File:Von_Neumann_Architecture.svg](./img/vna.png)
+# CPU -- you know it as a blackbox
 
+!["Von Neumann Architecture" by Kapooht - Own work. Licensed under CC BY-SA 3.0 via Commons](./img/vna.png)\ 
 
 ----
 
@@ -94,8 +66,8 @@ bool isPrimeEvenBetter(int p) {
 * Will this work?
 
 ~~~~~~~c++
-int swap(int *a, int *b) {
-  int *tmp = a;
+void swap(int &a, int &b) {
+  int tmp = a;
   a = b;
   b = tmp;
 }
@@ -116,7 +88,8 @@ int swap(int *a, int *b) {
 ## CPU -- Little of history :)
 
 * OOO needs to load a lot of instructions (128), what to do with conditional jumps?
-    * Branch prediction
+   * Branch prediction
+       * [Branch misprediction on bublesort](http://nicknash.me/2012/10/12/knuths-wisdom/)
 * OK, finally, our CPU is really fast, so fast, that memory is slow and does not provide input data
     * Simultaneous multithreading (HT)
 
@@ -130,9 +103,10 @@ int swap(int *a, int *b) {
 
 # CPU -- Modern instructions  (x86 is not strict RISC)
 
-> * SSE, SSE2-4.2 (128b)
-* AVX, AVX2 (~ FMA in AMD's world) (256b)
-* AVX-512 (512b)
+> * SIMD
+    * SSE, SSE2-4.2 (128b)
+    * AVX, AVX2 (~ FMA in AMD's world) (256b)
+    * AVX-512 (512b)
 * interesting (but not SIMD) new instructions:
     * [TSX](https://software.intel.com/en-us/blogs/2012/02/07/transactional-synchronization-in-haswell) -- Transactional Synchronization Extensions
     * [SGX](https://software.intel.com/en-us/blogs/2013/09/26/protecting-application-secrets-with-intel-sgx) (in development) -- Software Guard Extensions
@@ -141,7 +115,7 @@ int swap(int *a, int *b) {
 
 # The C/C++ programmer view
 
-> * know your compiler
+> * know your compiler, programming language and target architecture
 > * don't try to be smarter then your compiler -- compilers are pretty smart :P
 > * different levels of compiler optimizations `-O0 -O1 -O2 -O3`
 
@@ -149,15 +123,16 @@ int swap(int *a, int *b) {
 
 ## Vectorization
 
-> * today compilers can vectorize you code automaticaly
+* today compilers can vectorize you code automaticaly
 
 ~~~~~~~c++
         for (int i = 0; i < 32; i++)
             c[i] = a[i] + b[i];
 ~~~~~~~
-> * ...but several constraints must be met to make it fast
-    + memory alignemnt to 16 bytes (later)
-    + process data in order to make the full use of processor's cache
+
+* ...but several constraints must be met to make it fast
+    * memory alignemnt to 16 bytes (later)
+    * process data in order to make the full use of processor's cache
 
 ---
 
@@ -170,10 +145,10 @@ int swap(int *a, int *b) {
 
 ## Custom allocators
 > * preallocate the memory by the default allocator
-> * within the preallocated block you can implement you own allocator when you know something about your data
-> * different types for different purpouse
-    + stack allocator (elements of variable size; stack ordering)
-    + pool allocator (elements of fixed size; custom ordering)
+  * within the preallocated block you can implement you own allocator when you know something about your data
+  * different types for different purpouse
+    * stack allocator (elements of variable size; stack ordering)
+    * pool allocator (elements of fixed size; custom ordering)
 
 ----
 
@@ -229,23 +204,22 @@ t.join() // wait till the other thread finisches
 1. write functonal correct code
 2. analyze the code and determine parts that are slow and critical
 3. optimize them
-4. repeat till satisfied
+4. GOTO 2. till satisfied
 
 . . .
 
 ## Great tools
-> * <https://gcc.godbolt.org/>
-> * <https://software.intel.com/sites/landingpage/IntrinsicsGuide>
+> * [Online C/C++ to assembly (using many compilers)](https://gcc.godbolt.org/)
+> * [Intel intrinsics reference](https://software.intel.com/sites/landingpage/IntrinsicsGuide)
 
 ----
 
 # Try it yourself!
 
-> * Go to crcs.cz -> OpenLab -> current week -> prepared code
+> * Go to crcs.cz -> OpenLab -> CPU optimizations -> [task.zip](http://crcs.cz/wiki/lib/exe/fetch.php?media=public:crocs:openlab-cpu-optimization-task.zip)
 
 ## Sources
 > * Intro images & idea: [A Journey Through the CPU Pipeline ](http://www.gamedev.net/page/resources/_/technical/general-programming/a-journey-through-the-cpu-pipeline-r3115)
  * (Almost) current architecture: [Haswell is here. Architecture](http://www.cnews.cz/clanky/haswell-je-zde-inovace-architektura-nove-generace-procesoru-intel)
- * <http://www.codeproject.com/Articles/6154/Writing-Efficient-C-and-C-Code-Optimization>
- * <http://www.codeproject.com/Articles/6154/Writing-Efficient-C-and-C-Code-Optimization>
+ * [Basic C++ optimizations](http://www.eventhelix.com/RealtimeMantra/Basics/OptimizingCAndCPPCode.htm)
 

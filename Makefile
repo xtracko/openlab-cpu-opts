@@ -1,4 +1,4 @@
-all: cpu-optimizations.pdf
+all: cpu-optimizations.tex
 
-cpu-optimizations.pdf: cpu-optimizations.md
+cpu-optimizations.tex: cpu-optimizations.md
 	pandoc -i -t beamer -s $< -o $@

@@ -47,14 +47,13 @@ void task_two(int option)
 }
 
 void task_three(int argc, char** argv) {
-    while (argc > 0) {
-        if (std::strcmp(argc, "help") == 0)
+    for ( int i = 0; i < argc; i++) {
+        if (std::strcmp(argv[i], "help") == 0)
             std::cout << "Haha" << std::endl;
-        else if (std::strcmp(argc, "work") == 0)
+        else if (std::strcmp(argv[i], "work") == 0)
             std::cout << "No!" << std::endl;
-        else if (std::strcmp(argc, "sleep") == 0)
+        else if (std::strcmp(argv[i], "sleep") == 0)
             std::cout << "Yes please!" << std::endl;
         // and much more of if-elses...
-        argc--;
     }
 }
